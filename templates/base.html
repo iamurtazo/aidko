@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AidKo{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'navbar_styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // CSRF token for AJAX requests
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        
+        // Upvote functionality
+        function toggleUpvote(type, id) {
+            $.ajax({
+                url: `/upvote/${type}/${id}/`,
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                success: function(data) {
+                    const button = $(`.upvote-btn[data-${type}-id="${id}"]`);
+                    const countSpan = button.find('.upvote-count');
+                    
+                    countSpan.text(data.upvote_count);
+                    
+                    if (data.upvoted) {
+                        button.addClass('upvoted');
+                    } else {
+                        button.removeClass('upvoted');
+                    }
+                },
+                error: function() {
+                    alert('Please log in to vote.');
+                }
+            });
+        }
+    </script>
+    {% endblock %}
+</body>
+</html>

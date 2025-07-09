@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ question.title }} - AidKo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'questions_styles.css' %}">
+<style>
+    .question-detail {
+        padding: 2rem 0;
+    }
+    .question-header {
+        margin-bottom: 2rem;
+    }
+    .breadcrumb {
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+    .question-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    .question-votes {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 2rem;
+        min-width: 60px;
+    }
+    .upvote-btn {
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+    .upvote-btn:hover {
+        background: #f5f5f5;
+    }
+    .upvote-btn.upvoted {
+        color: var(--primary-color);
+        background: #f0fdfa;
+    }
+    .upvote-count {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0.5rem 0;
+    }
+    .answer-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 1rem;
+    }
+    .answer-form {
+        background: #f8f9fa;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-top: 2rem;
+    }
+    .accepted-answer {
+        border-left: 4px solid var(--success-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="question-detail">
+    <div class="container">
+        <!-- Question Header -->
+        <div class="question-header">
+            <nav class="breadcrumb">
+                <a href="{% url 'qa:home' %}">Home</a> &gt; 
+                <a href="{% url 'qa:questions' %}">Questions</a> &gt; 
+                <a href="{% url 'qa:category_questions' question.category.slug %}">{{ question.category.name }}</a> &gt; 
+                <span>{{ question.title|truncatechars:50 }}</span>
+            </nav>
+        </div>
+
+        <!-- Question Content -->
+        <div class="question-content">
+            <div style="display: flex;">
+                <div class="question-votes">
+                    {% if user.is_authenticated %}
+                        <button class="upvote-btn {% if user_has_upvoted_question %}upvoted{% endif %}" 
+                                data-question-id="{{ question.id }}"
+                                data-type="question">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    {% endif %}
+                    <span class="upvote-count">{{ question.upvote_count }}</span>
+                    {% if user.is_authenticated %}
+                        <button class="upvote-btn" style="transform: rotate(180deg);" disabled>
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    {% endif %}
+                </div>
+                
+                <div style="flex: 1;">
+                    <h1>{{ question.title }}</h1>
+                    
+                    <div class="question-meta" style="margin: 1rem 0; color: var(--text-muted);">
+                        <span>Asked by <strong>{{ question.author.username }}</strong></span>
+                        <span> • {{ question.created_at|timesince }} ago</span>
+                        <span> • {{ question.views }} views</span>
+                    </div>
+                    
+                    <div class="question-description">
+                        {{ question.description|linebreaks }}
+                    </div>
+                    
+                    <div class="question-tags" style="margin-top: 1rem;">
+                        <span class="tag category">{{ question.category.name }}</span>
+                        {% for tag in question.tags.all %}
+                            <span class="tag">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Answers Section -->
+        <div class="answers-section">
+            <h2>{{ answers.count }} Answer{{ answers.count|pluralize }}</h2>
+            
+            {% for answer in answers %}
+            <div class="answer-section {% if answer.is_accepted %}accepted-answer{% endif %}">
+                <div style="display: flex;">
+                    <div class="question-votes">
+                        {% if user.is_authenticated %}
+                            <button class="upvote-btn {% if user in answer.upvotes.all %}upvoted{% endif %}" 
+                                    data-answer-id="{{ answer.id }}"
+                                    data-type="answer">
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                        {% endif %}
+                        <span class="upvote-count">{{ answer.upvote_count }}</span>
+                        {% if user.is_authenticated %}
+                            <button class="upvote-btn" style="transform: rotate(180deg);" disabled>
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                        {% endif %}
+                        {% if answer.is_accepted %}
+                            <i class="fas fa-check" style="color: var(--success-color); margin-top: 1rem;" title="Accepted Answer"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <div style="flex: 1;">
+                        <div class="answer-content">
+                            {{ answer.content|linebreaks }}
+                        </div>
+                        
+                        <div class="answer-meta" style="margin-top: 1rem; color: var(--text-muted);">
+                            <span>Answered by <strong>{{ answer.author.username }}</strong></span>
+                            <span> • {{ answer.created_at|timesince }} ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-answers" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fas fa-comments" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <p>No answers yet. Be the first to answer!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Answer Form -->
+        {% if user.is_authenticated %}
+        <div class="answer-form">
+            <h3>Your Answer</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                        <div class="form-errors">
+                            {% for error in form.content.errors %}
+                                <p class="error">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">Post Your Answer</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="answer-form">
+            <p>You must <a href="{% url 'qa:login' %}">log in</a> to post an answer.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners to all upvote buttons
+    const upvoteButtons = document.querySelectorAll('.upvote-btn[data-question-id], .upvote-btn[data-answer-id]');
+    
+    upvoteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const questionId = this.getAttribute('data-question-id');
+            const answerId = this.getAttribute('data-answer-id');
+            const type = this.getAttribute('data-type');
+            
+            let url;
+            if (type === 'question' && questionId) {
+                url = `/upvote/question/${questionId}/`;
+            } else if (type === 'answer' && answerId) {
+                url = `/upvote/answer/${answerId}/`;
+            } else {
+                return; // Invalid data attributes
+            }
+            
+            // Get CSRF token
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the upvote count
+                const countSpan = this.parentElement.querySelector('.upvote-count');
+                if (countSpan) {
+                    countSpan.textContent = data.upvote_count;
+                }
+                
+                // Toggle the upvoted class
+                if (data.upvoted) {
+                    this.classList.add('upvoted');
+                } else {
+                    this.classList.remove('upvoted');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating upvote. Please try again.');
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

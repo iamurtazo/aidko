@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} Questions - AidKo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'questions_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="questions-container">
+    <div class="container">
+        <div class="category-header" style="margin-bottom: 2rem; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="{{ category.icon }}" style="font-size: 2rem; color: var(--primary-color);"></i>
+                <div>
+                    <h1>{{ category.name }} Questions</h1>
+                    <p>{{ category.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="questions-list">
+            {% for question in questions %}
+            <article class="question-card">
+                <div class="question-stats">
+                    <div class="stat">
+                        <span class="number">{{ question.upvote_count }}</span>
+                        <span class="label">votes</span>
+                    </div>
+                    <div class="stat {% if question.answer_count > 0 %}answered{% endif %}">
+                        <span class="number">{{ question.answer_count }}</span>
+                        <span class="label">answers</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number">{{ question.views }}</span>
+                        <span class="label">views</span>
+                    </div>
+                </div>
+                <div class="question-content">
+                    <h2>
+                        <a href="{{ question.get_absolute_url }}">{{ question.title }}</a>
+                    </h2>
+                    <p>{{ question.description|truncatewords:30 }}</p>
+                    <div class="question-meta">
+                        <div class="tags">
+                            {% for tag in question.tags.all %}
+                            <span class="tag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="author">
+                            <div class="author-info">
+                                <span class="author-name">{{ question.author.username }}</span>
+                                <span class="post-time">asked {{ question.created_at|timesince }} ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="no-questions" style="text-align: center; padding: 4rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <i class="fas fa-question-circle" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <h3>No questions in this category yet</h3>
+                <p>Be the first to ask a question in {{ category.name }}!</p>
+                <a href="{% url 'qa:ask_question' %}" class="btn btn-primary">Ask a Question</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

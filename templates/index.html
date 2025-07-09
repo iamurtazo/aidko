@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AidKo - Get Help Living in Korea{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'adinco_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Get Help Living in Korea</h1>
+        <p class="hero-text">Connect with experienced expats and get answers to your questions</p>
+        <form method="GET" action="{% url 'qa:questions' %}" class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" name="search" placeholder="Search for questions or topics...">
+        </form>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="categories">
+    <div class="container">
+        <h2>Browse Categories</h2>
+        <div class="category-grid">
+            {% for category in categories %}
+            <a href="{% url 'qa:category_questions' category.slug %}" class="category-card">
+                <i class="{{ category.icon }}"></i>
+                <span>{{ category.name }}</span>
+                <small>{{ category.question_count }} question{{ category.question_count|pluralize }}</small>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Recent Questions -->
+<section class="recent-questions">
+    <div class="container">
+        <h2>Recent Questions</h2>
+        <div class="questions-grid">
+            {% for question in recent_questions %}
+            <div class="question-card">
+                <h3><a href="{{ question.get_absolute_url }}">{{ question.title }}</a></h3>
+                <div class="question-meta">
+                    <span class="category">{{ question.category.name }}</span>
+                    <span class="answers">{{ question.answer_count }} answer{{ question.answer_count|pluralize }}</span>
+                    <span class="votes">{{ question.upvote_count }} vote{{ question.upvote_count|pluralize }}</span>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-questions">
+                <p>No questions yet. Be the first to ask!</p>
+                <a href="{% url 'qa:ask_question' %}" class="btn btn-primary">Ask a Question</a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="view-all">
+            <a href="{% url 'qa:questions' %}" class="btn btn-outline">View All Questions</a>
+        </div>
+    </div>
+</section>
+
+<!-- Community Stats -->
+<section class="community-stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_users|default:"10+" }}</div>
+                <div class="stat-label">Community Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_questions|default:"50+" }}</div>
+                <div class="stat-label">Questions Asked</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_answers|default:"100+" }}</div>
+                <div class="stat-label">Answers Given</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

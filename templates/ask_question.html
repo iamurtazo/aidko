@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ask Question - AidKo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'ask_question_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Main Content -->
+<main class="ask-question-container">
+    <div class="container">
+        <!-- Question Form Header -->
+        <div class="form-header">
+            <h1>Ask a Question</h1>
+            <p class="header-text">Get help from our community of expats and locals in Korea</p>
+        </div>
+
+        <!-- Writing Guidelines -->
+        <div class="guidelines">
+            <h2>Writing a good question</h2>
+            <div class="guidelines-grid">
+                <div class="guideline-item">
+                    <i class="fas fa-search"></i>
+                    <div>
+                        <h3>Search first</h3>
+                        <p>Make sure your question hasn't been asked before</p>
+                    </div>
+                </div>
+                <div class="guideline-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <h3>Be specific</h3>
+                        <p>Include details that will help others understand your situation</p>
+                    </div>
+                </div>
+                <div class="guideline-item">
+                    <i class="fas fa-tags"></i>
+                    <div>
+                        <h3>Use tags</h3>
+                        <p>Add relevant tags to help others find your question</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Form -->
+        <div class="question-form-section">
+            <form method="post" class="question-form">
+                {% csrf_token %}
+                
+                <!-- Title Field -->
+                <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}">Question Title</label>
+                    <p class="field-hint">Be specific and imagine you're asking a question to another person</p>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="form-errors">
+                            {% for error in form.title.errors %}
+                                <p class="error">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Category Field -->
+                <div class="form-group">
+                    <label for="{{ form.category.id_for_label }}">Category</label>
+                    <p class="field-hint">Choose the most relevant category for your question</p>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="form-errors">
+                            {% for error in form.category.errors %}
+                                <p class="error">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Description Field -->
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">Question Details</label>
+                    <p class="field-hint">Include all the information someone would need to answer your question</p>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="form-errors">
+                            {% for error in form.description.errors %}
+                                <p class="error">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Tags Field -->
+                <div class="form-group">
+                    <label for="{{ form.tags.id_for_label }}">Tags</label>
+                    <p class="field-hint">{{ form.tags.help_text }}</p>
+                    {{ form.tags }}
+                    {% if form.tags.errors %}
+                        <div class="form-errors">
+                            {% for error in form.tags.errors %}
+                                <p class="error">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Preview Section -->
+                <div class="form-actions">
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Post Your Question
+                        </button>
+                        <a href="{% url 'qa:home' %}" class="btn btn-outline">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tips Sidebar -->
+        <aside class="tips-sidebar">
+            <div class="tips-card">
+                <h3>
+                    <i class="fas fa-info-circle"></i>
+                    Tips for getting answers
+                </h3>
+                <ul class="tips-list">
+                    <li>Write a clear, descriptive title</li>
+                    <li>Provide context about your situation</li>
+                    <li>Include relevant details like location, timeline, or specific requirements</li>
+                    <li>Use appropriate tags to help others find your question</li>
+                    <li>Be respectful and patient while waiting for answers</li>
+                </ul>
+            </div>
+
+            <div class="tips-card">
+                <h3>
+                    <i class="fas fa-heart"></i>
+                    Community Guidelines
+                </h3>
+                <ul class="tips-list">
+                    <li>Be kind and respectful to all members</li>
+                    <li>Search before asking to avoid duplicates</li>
+                    <li>Accept helpful answers by marking them as accepted</li>
+                    <li>Upvote questions and answers that help you</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</main>
+{% endblock %}
+                    </div>
+                    <div class="guideline-item">
+                        <i class="fas fa-heading"></i>
+                        <div>
+                            <h3>Be specific</h3>
+                            <p>Include details and background in your question</p>
+                        </div>
+                    </div>
+                    <div class="guideline-item">
+                        <i class="fas fa-tags"></i>
+                        <div>
+                            <h3>Add relevant tags</h3>
+                            <p>Tags help others find and answer your question</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Form -->
+            <form class="question-form">
+                <!-- Title -->
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <p class="field-description">Be specific and imagine you're asking another person</p>
+                    <input type="text" id="title" name="title" 
+                           placeholder="e.g., How do I register for health insurance as a foreign student in Seoul?">
+                </div>
+
+                <!-- Category -->
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <p class="field-description">Select the most relevant category for your question</p>
+                    <select id="category" name="category">
+                        <option value="">Select a category</option>
+                        <option value="documentation">Documentation</option>
+                        <option value="housing">Housing</option>
+                        <option value="language">Language</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="banking">Banking</option>
+                        <option value="lifestyle">Lifestyle</option>
+                    </select>
+                </div>
+
+                <!-- Details -->
+                <div class="form-group">
+                    <label for="details">Details</label>
+                    <p class="field-description">Include all the information someone would need to answer your question</p>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn"><i class="fas fa-list-ul"></i></button>
+                        <button type="button" class="toolbar-btn"><i class="fas fa-list-ol"></i></button>
+                        <button type="button" class="toolbar-btn"><i class="fas fa-link"></i></button>
+                        <button type="button" class="toolbar-btn"><i class="fas fa-image"></i></button>
+                    </div>
+                    <textarea id="details" name="details" rows="10" 
+                              placeholder="Explain your situation in detail..."></textarea>
+                </div>
+
+                <!-- Tags -->
+                <div class="form-group">
+                    <label for="tags">Tags</label>
+                    <p class="field-description">Add up to 5 tags to describe what your question is about</p>
+                    <input type="text" id="tags" name="tags" 
+                           placeholder="e.g., visa, student, healthcare">
+                    <div class="tags-suggestions">
+                        <span class="tag">student</span>
+                        <span class="tag">visa</span>
+                        <span class="tag">healthcare</span>
+                        <span class="tag">documentation</span>
+                    </div>
+                </div>
+
+                <!-- Preview -->
+                <div class="preview-section">
+                    <h3>Preview</h3>
+                    <div class="preview-content">
+                        Your question preview will appear here...
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline">Preview</button>
+                    <button type="submit" class="btn btn-primary">Post Your Question</button>
+                </div>
+            </form>
+
+            <!-- Similar Questions -->
+            <div class="similar-questions">
+                <h3>Similar Questions</h3>
+                <div class="similar-questions-list">
+                    <!-- Will be populated dynamically based on user input -->
+                    <p class="empty-state">Similar questions will appear here as you type...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

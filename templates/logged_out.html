@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Logged Out - AidKo{% endblock %}
+
+{% block extra_css %}
+<style>
+    .logged-out-container {
+        min-height: calc(100vh - 120px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+    
+    .logged-out-card {
+        background: white;
+        padding: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+    
+    .logged-out-icon {
+        width: 64px;
+        height: 64px;
+        background: var(--success-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: white;
+        font-size: 1.5rem;
+    }
+    
+    .logged-out-header h1 {
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+        font-size: 1.75rem;
+    }
+    
+    .logged-out-header p {
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+        line-height: 1.5;
+    }
+    
+    .logged-out-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+    
+    .logged-out-actions .btn {
+        min-width: 120px;
+    }
+    
+    .quick-links {
+        padding-top: 2rem;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .quick-links h3 {
+        color: var(--text-color);
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+    
+    .quick-links-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    .quick-link {
+        padding: 0.75rem;
+        background: #f8f9fa;
+        border-radius: 6px;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .quick-link:hover {
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+    
+    .quick-link i {
+        width: 16px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="logged-out-container">
+    <div class="logged-out-card">
+        <div class="logged-out-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        
+        <div class="logged-out-header">
+            <h1>Successfully Logged Out</h1>
+            <p>You have been securely logged out of your AidKo account. Thank you for using our community platform!</p>
+        </div>
+        
+        <div class="logged-out-actions">
+            <a href="{% url 'qa:login' %}" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In Again
+            </a>
+            <a href="{% url 'qa:home' %}" class="btn btn-outline">
+                <i class="fas fa-home"></i>
+                Go Home
+            </a>
+        </div>
+        
+        <div class="quick-links">
+            <h3>Continue Browsing</h3>
+            <div class="quick-links-grid">
+                <a href="{% url 'qa:questions' %}" class="quick-link">
+                    <i class="fas fa-question-circle"></i>
+                    Browse Questions
+                </a>
+                <a href="{% url 'qa:community' %}" class="quick-link">
+                    <i class="fas fa-users"></i>
+                    Community
+                </a>
+                <a href="{% url 'qa:blog' %}" class="quick-link">
+                    <i class="fas fa-blog"></i>
+                    Read Blog
+                </a>
+                <a href="{% url 'qa:register' %}" class="quick-link">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

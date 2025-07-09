@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog - AidKo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'blog_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Blog Hero -->
+<section class="blog-hero">
+    <div class="container">
+        <div class="blog-hero-content">
+            <h1>Expat Life in Korea</h1>
+            <p class="hero-text">Discover, Learn, and Connect</p>
+            <div class="blog-hero-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search blog posts...">
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Featured Post -->
+    <section class="featured-post">
+        <div class="container">
+            <div class="featured-post-content">
+                <div class="featured-post-image">
+                    <img src="/static/images/mastering.png" alt="Featured Blog Post">
+                </div>
+                <div class="featured-post-details">
+                    <span class="featured-badge">Featured</span>
+                    <h2>Mastering Korean Work Culture: An Insider's Guide</h2>
+                    <p>Navigate the nuanced world of Korean professional environments with confidence and cultural sensitivity.</p>
+                    <div class="post-meta">
+                        <img src="/static/images/profile_picture.png" alt="Author" class="member-avatar">
+                        <div class="author-info">
+                            <span class="author-name">Sarah Kim</span>
+                            <span class="post-date">May 15, 2024 • 5 min read</span>
+                        </div>
+                    </div>
+                    <br>
+                    <a href="#" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Blog Posts -->
+    <section class="recent-blog-posts">
+        <div class="container">
+            <h2>Latest Blog Posts</h2>
+            <div class="blog-posts-grid">
+                <div class="blog-post-card">
+                    <div class="blog-post-image">
+                        <img src="/static/images/korean_learning.png" alt="Blog Post">
+                    </div>
+                    <div class="blog-post-content">
+                        <h3>Korean Language Learning Strategies</h3>
+                        <p>Effective methods to accelerate your Korean language skills</p>
+                        <div class="post-meta">
+                            <span class="category">Language</span>
+                            <span class="read-time">4 min read</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-post-card">
+                    <div class="blog-post-image">
+                        <img src="/static/images/hidden.png" alt="Blog Post">
+                    </div>
+                    <div class="blog-post-content">
+                        <h3>Hidden Gems of Seoul's Food Scene</h3>
+                        <p>Explore beyond tourist favorites to local culinary treasures</p>
+                        <div class="post-meta">
+                            <span class="category">Food</span>
+                            <span class="read-time">6 min read</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-post-card">
+                    <div class="blog-post-image">
+                        <img src="/static/images/navigating.png" alt="Blog Post">
+                    </div>
+                    <div class="blog-post-content">
+                        <h3>Navigating Korean Bureaucracy</h3>
+                        <p>Essential tips for handling administrative processes</p>
+                        <div class="post-meta">
+                            <span class="category">Lifestyle</span>
+                            <span class="read-time">5 min read</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="blog-newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Stay Informed, Stay Connected</h2>
+                <p>Get the latest expat tips, stories, and insights delivered straight to your inbox</p>
+                <div class="newsletter-signup">
+                    <input type="email" placeholder="Enter your email address">
+                    <button class="btn btn-primary">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,23 @@
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-left">
+            <a href="{% url 'qa:home' %}" class="logo">AidKo</a>
+            <div class="nav-links">
+                <a href="{% url 'qa:home' %}" {% if active_page == 'home' %}class="active"{% endif %}>Home</a>
+                <a href="{% url 'qa:questions' %}" {% if active_page == 'questions' %}class="active"{% endif %}>Questions</a>
+                <a href="{% url 'qa:community' %}" {% if active_page == 'community' %}class="active"{% endif %}>Community</a>
+                <a href="{% url 'qa:blog' %}" {% if active_page == 'blog' %}class="active"{% endif %}>Blog</a>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <a href="{% url 'qa:ask_question' %}" class="btn btn-primary">Ask Question</a>
+            {% if user.is_authenticated %}
+                <span class="user-info" style="color: var(--text-muted); margin-right: 1rem;">Welcome, <strong>{{ user.username }}</strong>!</span>
+                <a href="{% url 'qa:logout' %}" class="btn btn-outline">Logout</a>
+            {% else %}
+                <a href="{% url 'qa:login' %}" class="btn btn-outline">Sign In</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
